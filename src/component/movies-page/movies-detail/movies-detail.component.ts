@@ -119,18 +119,20 @@ export class MoviesDetailComponent implements OnInit, OnDestroy {
     let movieData: any = new MovieDataType(Number(id), this.movieInfoForm.value['movieTitle'], this.movieInfoForm.value['movieReleaseDate'])
     movieData.releaseDate = this.dateFormat(movieData.releaseDate)
     movieData['pariticipatedActors'] = this.actorList
-    if (this.isEditExistingData && this.movieInfoForm.status === "VALID") {
-      this.movieService.updateMovie(movieData).pipe(catchError(this.movieService.handleError)).subscribe((res) => {
-        this.movieService.EditingMovie = res['updatedMovie']
-        this.ngOnInit()
-      })
-    } else if (this.movieInfoForm.status === "VALID") {
-      this.movieService.createMovie(movieData).pipe(catchError(this.movieService.handleError)).subscribe((res) => {
-        this.movieService.movielist = res['movieList']
-        this.movieService.movielist = this.movieService.movielist.sort((a:any, b:any) => a['id'] - b['id'])
-        this.movieService.EditingMovie = this.movieService.movielist.find((item) => item.title = movieData.title)
-        this.getMovieInfo()
-      })
+    if (this.movieInfoForm.status === 'VALID') {
+      if (this.isEditExistingData) {
+        this.movieService.updateMovie(movieData).pipe(catchError(this.movieService.handleError)).subscribe((res) => {
+          this.movieService.EditingMovie = res['updatedMovie']
+          this.ngOnInit()
+        })
+      } else {
+        this.movieService.createMovie(movieData).pipe(catchError(this.movieService.handleError)).subscribe((res) => {
+          this.movieService.movielist = res['movieList']
+          this.movieService.movielist = this.movieService.movielist.sort((a:any, b:any) => a['id'] - b['id'])
+          this.movieService.EditingMovie = this.movieService.movielist.find((item) => item.title = movieData.title)
+          this.getMovieInfo()
+        })
+      }
     }
   }
 

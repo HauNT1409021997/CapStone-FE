@@ -33,6 +33,7 @@ export class MoviesListComponent implements OnInit, OnDestroy {
   getMovieList() {
     this.formattedReleaseDate = []
     const  getMovieList = this.movieService.getObservable().subscribe((object) => {
+      console.log(object)
       if (object.logic === 'sendList') {
         this.filmList = object.sentData || []
         this.filmList.forEach((item:MovieDataType) => {

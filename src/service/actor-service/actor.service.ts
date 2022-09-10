@@ -5,6 +5,7 @@ import { BehaviorSubject, Subscription, throwError } from 'rxjs';
 import { createActor } from 'src/component/actor-page/actor-store/actor.action';
 import { ActorInfo } from 'src/data-type/actor';
 import actorInterface from 'src/data-type/actor.interface';
+import { environment } from 'src/environments/environment.prod';
 
 @Injectable({
   providedIn: 'root'
@@ -17,14 +18,14 @@ export class ActorService {
 
   getActorList (searchInfo:any) {
     if (searchInfo) {
-      return this.http.post<actorInterface>('http://127.0.0.1:5000/actors-filter', JSON.stringify(searchInfo))
+      return this.http.post<actorInterface>(`${environment.baseUrl}actors-filter`, JSON.stringify(searchInfo))
     } else {
-      return this.http.get<actorInterface>('http://127.0.0.1:5000/actors-all')
+      return this.http.get<actorInterface>(`${environment.baseUrl}actors-all`)
     }
   }
 
   createActor(actorDetail:any) {
-    return this.http.post<actorInterface>('http://127.0.0.1:5000/actors', JSON.stringify(actorDetail))
+    return this.http.post<actorInterface>(`${environment.baseUrl}actors`, JSON.stringify(actorDetail))
     // this.store.dispatch(createActor({actorInfo: actorDetail}))
   }
 
@@ -32,14 +33,14 @@ export class ActorService {
     let data = {
       actor_id: actorDetail.id
     }
-    return this.http.patch<actorInterface>(this.concateDatatoApiEndpoints('http://127.0.0.1:5000/actors-update-info', data ), JSON.stringify(actorDetail))
+    return this.http.patch<actorInterface>(this.concateDatatoApiEndpoints(`${environment.baseUrl}actors-update-info`, data ), JSON.stringify(actorDetail))
   }
 
   removeActorAcion(actorId:number = -1) {
     let data = {
       actor_id: actorId
     }
-    return this.http.delete<actorInterface>(this.concateDatatoApiEndpoints('http://127.0.0.1:5000/actors-eviction', data ))
+    return this.http.delete<actorInterface>(this.concateDatatoApiEndpoints(`${environment.baseUrl}actors-eviction`, data ))
   }
 
 

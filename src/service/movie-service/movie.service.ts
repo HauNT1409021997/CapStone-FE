@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, catchError, Observable, Subscription, throwError } from 'rxjs';
 import actorInterface from 'src/data-type/actor.interface';
 import {  MovieDataType } from 'src/data-type/movie';
-
+import { environment } from 'src/environments/environment.prod';
 @Injectable({
   providedIn: 'root'
 })
@@ -16,19 +16,19 @@ export class MovieService {
   constructor(private http:HttpClient) { }
 
   getSingleMovie(movieName:string = '') {
-    return this.http.get<any>(`http://127.0.0.1:5000/movies?movieName=${movieName}`)
+    return this.http.get<any>(`${environment.baseUrl}movies?movieName=${movieName}`)
   }
 
   getMovieList() {
-    return this.http.get<any>(`http://127.0.0.1:5000/movies`)
+    return this.http.get<any>(`${environment.baseUrl}movies`)
   }
 
   getActorList () {
-    return this.http.get<actorInterface>('http://127.0.0.1:5000/actors-all')
+    return this.http.get<actorInterface>(`${environment.baseUrl}actors-all`)
   }
 
   getParticipatedActor (id:number = 0) {
-    return this.http.get<actorInterface>(`http://127.0.0.1:5000/casted-actors?movieId=${id}`)
+    return this.http.get<actorInterface>(`${environment.baseUrl}casted-actors?movieId=${id}`)
   }
 
   getNewMovieCreated() {
@@ -36,15 +36,15 @@ export class MovieService {
   }
 
   createMovie(movieData:MovieDataType|undefined = undefined){
-    return this.http.post<any>('http://127.0.0.1:5000/movies',JSON.stringify(movieData))
+    return this.http.post<any>(`${environment.baseUrl}movies`,JSON.stringify(movieData))
   }
 
   updateMovie(movieData:MovieDataType|undefined = undefined) {
-    return this.http.patch<any>(`http://127.0.0.1:5000/movies-update-info?movie_id=${movieData?.id}`, JSON.stringify(movieData))
+    return this.http.patch<any>(`${environment.baseUrl}movies-update-info?movie_id=${movieData?.id}`, JSON.stringify(movieData))
   }
 
   deleteNewMovieCreated (id:number = 0) {
-    return this.http.delete(`http://127.0.0.1:5000/movies-eviction?movie_id=${id}`)
+    return this.http.delete(`${environment.baseUrl}movies-eviction?movie_id=${id}`)
   }
 
   observableSendData (data:{} = {}, type:string = '') {
